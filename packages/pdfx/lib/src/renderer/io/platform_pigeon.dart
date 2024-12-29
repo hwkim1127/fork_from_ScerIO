@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:pdfx/src/renderer/get_pixels/main.dart';
@@ -9,7 +11,6 @@ import 'package:pdfx/src/renderer/interfaces/page.dart';
 import 'package:pdfx/src/renderer/interfaces/platform.dart';
 import 'package:pdfx/src/renderer/io/pigeon.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 final _lock = Lock();
 final _api = PdfxApi();
@@ -24,7 +25,7 @@ class PdfxPlatformPigeon extends PdfxPlatform {
   /// Open PDF document from filesystem path
   @override
   Future<PdfDocument> openFile(String filePath, {String? password}) async {
-    if (UniversalPlatform.isWeb) {
+    if (kIsWeb) {
       throw PlatformNotSupportedException();
     }
     return _open(
@@ -249,9 +250,7 @@ class PdfPageImagePigeon extends PdfPageImage {
     required bool removeTempFile,
   }) async {
     if (format == PdfPageImageFormat.webp &&
-        (UniversalPlatform.isIOS ||
-            UniversalPlatform.isWindows ||
-            UniversalPlatform.isMacOS)) {
+        (Platform.isIOS || Platform.isWindows || Platform.isMacOS)) {
       throw PdfNotSupportException(
         'PDF Renderer on IOS & Windows, MacOs platforms '
         'do not support WEBP format',
@@ -277,9 +276,7 @@ class PdfPageImagePigeon extends PdfPageImage {
 
     final retWidth = result.width, retHeight = result.height;
     late final Uint8List pixels;
-    if (UniversalPlatform.isAndroid ||
-        UniversalPlatform.isIOS ||
-        UniversalPlatform.isMacOS) {
+    if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
       pixels = await getPixels(
         path: result.path,
         removeTempFile: removeTempFile,

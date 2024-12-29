@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart'
@@ -9,7 +10,6 @@ import 'package:pdfx/src/viewer/base/base_pdf_builders.dart';
 import 'package:pdfx/src/viewer/base/base_pdf_controller.dart';
 import 'package:pdfx/src/viewer/interactive_viewer.dart';
 import 'package:pdfx/src/viewer/wrappers/pdf_texture.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:vector_math/vector_math_64.dart' as math64;
 
 export 'package:pdfx/src/viewer/pdf_page_image_provider.dart';
@@ -95,7 +95,7 @@ class _PdfViewPinchState extends State<PdfViewPinch>
   @override
   void initState() {
     super.initState();
-    if (UniversalPlatform.isWindows) {
+    if (Platform.isWindows) {
       throw UnimplementedError(
           'PdfViewPinch not supported in Windows, usage PdfView instead');
     }

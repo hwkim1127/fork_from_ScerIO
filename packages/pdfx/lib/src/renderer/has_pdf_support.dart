@@ -1,18 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:universal_platform/universal_platform.dart';
+import 'package:flutter/foundation.dart';
 
 final _deviceInfo = DeviceInfoPlugin();
 
 Future<bool> hasPdfSupport() async {
-  if (UniversalPlatform.isMacOS ||
-      UniversalPlatform.isIOS ||
-      UniversalPlatform.isWindows ||
-      UniversalPlatform.isWeb) {
+  if (kIsWeb) return true;
+  if (Platform.isMacOS || Platform.isIOS || Platform.isWindows) {
     return true;
   }
-  if (UniversalPlatform.isAndroid) {
+  if (Platform.isAndroid) {
     final androidInfo = await _deviceInfo.androidInfo;
     return androidInfo.version.sdkInt >= 21;
   }
